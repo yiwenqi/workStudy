@@ -77,7 +77,7 @@ $ git add README(文件名)
 
 一般我们总会有些文件无需纳入 Git 的管理，也不希望它们总出现在未跟踪文件列表。通常都是些自动生成的文件，比如日志文件，或者编译过程中创建的临时文件等。我们可以创建一个名为 `.gitignore` 的文件，列出要忽略的文件模式。
 
-#### **查看已暂存喝未暂存的更新**
+#### **查看已暂存和未暂存的更新**
 
 实际上我们使用 `git status` 即可查看我们修改了那些文件，但是显示的比较粗略。如果想要查看具体修改了那些地方，可以使用`git diff`。
 
@@ -144,6 +144,14 @@ $ git commit --amend
 
 如果是忘记提交某些修改了，则可以补上暂存操作 （`git add`）然后允许此命令，即可补上。
 
+#### 将已经 `push`的文件从git远程库之中删除
+
+已经推送（push）过的文件，想从git远程库中删除，并在以后的提交中忽略，但是却还想在本地保留这个文件
+
+```bash
+git rm --cached Xml/config.xml
+```
+
 
 
 #### 取消已经暂存的文件
@@ -170,6 +178,17 @@ $ git remote
 $ git remote add  [GoS,别名]  <url>
 ```
 
+备注：创建本地分支`push`到远程分支
+
+```bash
+$ git init 
+$ git remote add <远程库别名> <url>
+$ git branch branch_name   // 这一步是必须的，否则会 unable to access
+$ git add .
+$ git commit -m ""
+$ git push <远程库别名> main
+```
+
 
 
 #### 从远程仓库抓取数据
@@ -185,6 +204,8 @@ $ git fetch [remote-name]
 ```bash
 git push origin master
 ```
+
+此命令会到远程仓库中拉取所有你本地仓库中还没有的数据。当我们有多个分支时，该命令会将其他分支的数据也获取到本地，并创建分支。
 
 
 
@@ -217,3 +238,71 @@ $git tag -a 'V1.2' //打标签v1.2
 
 - -m 注释
 - -a 打标签
+
+### 分支管理
+
+#### 查看分支
+
+```bash
+$ git branch 
+```
+
+#### 新建分支
+
+```bash
+$ git branch name
+```
+
+#### 切换分支
+
+```bash
+$ git checkout name
+```
+
+*若不存在，则创建一个分支
+
+#### 删除分支
+
+```bash
+git branch -d name
+```
+
+
+
+#### 分支合并
+
+背景: 从`master`中克隆一个分支，并在上面开发，现在我需要将`dev`开发分支合并到`master`。
+
+```bash
+$ git checkout master   // 首先切回master上
+$ git merge dev
+```
+
+- 当发生冲突时，Git会做合并，但不会提交，而是等我们解决完冲突。
+
+```bash
+$ git status //查看那些文件发生了冲突
+<<<<<<< HEAD:index.html
+    <div id="footer">contact : email.support@github.com</div>
+    =======
+    <div id="footer">
+    please contact us at support@github.com
+    </div>
+    >>>>>>> iss53:index.html
+# 解决完上述冲突
+重新git status查看
+```
+
+#### 删除远程分支
+
+```bash
+$ git push [远程名]  :[远程分支]
+```
+
+#### 将本地分支与远程分支绑定 
+
+```bash
+ $ git push --set-upstream <远程仓库别名> <分支名>
+ $ git push --set-upstream origin dev/unittest
+```
+
