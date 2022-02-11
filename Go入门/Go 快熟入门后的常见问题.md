@@ -178,9 +178,30 @@ func main(){
 
 ### 结构体
 
-结构体是值类型，并不是引用类型
+**结构体是值类型，并不是引用类型**
 
 结构体在内存中的布局：
 
+- 结构体的所有字段在内存中连续的。
+
 ![image-20220208225841548](https://raw.githubusercontent.com/yiwenqi/cloudimg/main/img/image-20220208225841548.png)
+
+注意事项：
+
+- 结构体中的指针，切片，map都是引用类型，需要先make，分配空间才可以使用。
+- 不同结构体中的变量互不影响，他们之间是独立的。
+
+结构体的使用方法：
+
+- var  person Person
+- var person Person = Person{}
+- var persoon *Person = new(Person)
+  - new 出来的是一个指针类型，指向创建的结构体。
+- var person *Person = &Person{}
+
+当结构体变量为指针类型时，我们可以使用以下两种方式获取结构体值：
+
+- `(*person).Name`  //  不能将括号去掉，因为 `.` 的运算符比较高，去掉后`person.Name`没有问题，但是取到后还有一个 `* ` 这样就错了。
+- person.Name  
+  - person.Name 在go程序的底层会转换成 ---> (*person).Name
 
