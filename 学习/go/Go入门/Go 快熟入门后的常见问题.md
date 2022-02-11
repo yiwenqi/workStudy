@@ -1,4 +1,4 @@
-## Go 快熟入门后的常见问题
+## Go 快速入门后的常见问题
 
 推荐系统学习Golang，一个扎实的基础能够让你工作的更加顺利。
 
@@ -182,5 +182,15 @@ func main(){
 
 结构体在内存中的布局：
 
-![image-20220208225841548](https://raw.githubusercontent.com/yiwenqi/cloudimg/main/img/image-20220208225841548.png)
+![image-20220208225841548](https://raw.githubusercontent.com/yiwenqi/cloudimg/main/data/image-20220208225841548.png)
+
+两个结构体之间的转换必须字段的个数，名称，类型一致。
+
+## GO体系学习
+
+#### GOPATH
+
+GOPATH，用于指向工作目录
+
+#### GOMOD
 

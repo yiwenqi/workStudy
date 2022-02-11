@@ -138,6 +138,7 @@ $ git commit --amend
 
 ```bash
 $ git commit --amend
+$ git push -f
 ```
 
 如果刚刚提交完没有任何动作，那么运行此命令，相当于有机会重新编辑提交说明，但要提交时的快照一样。
