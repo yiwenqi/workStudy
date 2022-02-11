@@ -210,6 +210,65 @@ func main(){
 
 #### GOPATH
 
-GOPATH，用于指向工作目录
+GOPATH，用于指向工作目录。如果我们使用环境变量来切换我们的工作目录会异常麻烦，且容易误操作。在IDE集成工具中我们可以在设置中设置项目的GOPATH。
+
+多项目中使用GOPATH：
+
+![image-20220211101316045](https://raw.githubusercontent.com/yiwenqi/cloudimg/main/data/image-20220211101316045.png)
+
+GOPATH在不同平台上的安装路径
+
+| 平  台       | GOPATH 默认值    | 举 例              |
+| ------------ | ---------------- | ------------------ |
+| Windows 平台 | %USERPROFILE%/go | C:\Users\用户名\go |
+| Unix 平台    | $HOME/go         | /home/用户名/go    |
+
+**GOPATH的工程结构**
+
+在 GOPATH 指定的工作目录下，代码总是会保存在 $GOPATH/src 目录下。在工程经过 go build、go install 或 go get 等指令后，会将产生的二进制可执行文件放在 $GOPATH/bin 目录下，生成的中间缓存文件会被保存在 $GOPATH/pkg 下。
+
+| 目录        | 说明                                                         |      |
+| ----------- | ------------------------------------------------------------ | ---- |
+| $GOPATH/src | 代码一般保存在这个目录下面                                   |      |
+| $GOPATH/bin | 在工程经过 go build、go install 或 go get 等指令后产生的二进制可执行文件 |      |
+| $GOPATH/pkg | 中间缓存文件                                                 |      |
 
 #### GOMOD
+
+GOMOD 在v1.11版本中正式推出。在1.11时env多了一个环境变量： `GO111MODULE` ,`GO111MODULE` 是一个开关，通过它可以开启或关闭 go mod 模式。他有三个可选值：`off`、`on`、`auto`，默认值是`auto`。
+
+1. `GO111MODULE=off`禁用模块支持，编译时会从`GOPATH`和`vendor`文件夹中查找包。
+2. `GO111MODULE=on`启用模块支持，编译时会忽略`GOPATH`和`vendor`文件夹，只根据 `go.mod`下载依赖。
+3. `GO111MODULE=auto`，当项目在`$GOPATH/src`外且项目根目录有`go.mod`文件时，自动开启模块支持。
+
+go.mod文件：
+
+- 第一行：模块的引用路径
+- 第二行：项目使用的 go 版本
+- 第三行：项目所需的直接依赖包及其版本
+
+```go
+module github.com/BingmingWong/module-test
+
+go 1.14
+
+require (
+    example.com/apple v0.1.2
+    example.com/banana v1.2.3
+    example.com/banana/v2 v2.3.4
+    example.com/pear // indirect
+    example.com/strawberry // incompatible
+)
+
+exclude example.com/banana v1.2.4
+replace（
+    golang.org/x/crypto v0.0.0-20180820150726-614d502a4dac => github.com/golang/crypto v0.0.0-20180820150726-614d502a4dac
+    golang.org/x/net v0.0.0-20180821023952-922f4815f713 => github.com/golang/net v0.0.0-20180826012351-8a410e7b638d
+    golang.org/x/text v0.3.0 => github.com/golang/text v0.3.0
+)
+```
+
+主要是多出了两个 flag：
+
+- `exclude`： 忽略指定版本的依赖包
+- `replace`：由于在国内访问golang.org/x的各个包都需要f.q，你可以在go.mod中使用replace替换成github上对应的库。
