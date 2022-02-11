@@ -2,6 +2,12 @@
 
 ### Git 基础
 
+#### **Git突然需要密码**
+
+git remote -v 查看一下是否为https协议如果是则改成ssh协议，
+
+ git remote set-url origin git@github.com/xxxx
+
 #### **文件的三种状态**
 
 Git 中只有三种状态：已提交，已修改，和已暂存。已提交表示该文件已经被安全的保存在本地数据库中了；以修改表示修改了某个文件，但还没提交保存，已占村表示把已修改的文件放在下次提交时要保存的清单中；
@@ -283,13 +289,9 @@ $ git merge dev
 
 ```bash
 $ git status //查看那些文件发生了冲突
-<<<<<<< HEAD:index.html
-    <div id="footer">contact : email.support@github.com</div>
-    =======
     <div id="footer">
     please contact us at support@github.com
     </div>
-    >>>>>>> iss53:index.html
 # 解决完上述冲突
 重新git status查看
 ```
