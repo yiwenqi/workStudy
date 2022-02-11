@@ -151,6 +151,30 @@ slice3 = append(slice3,slice3...)
 copy(b,a)
 ```
 
+### interface{} 与 []interface{}
+
+**痛点分析：**
+
+​	`interface{}`可以赋值任何类型，而当我们想要赋任意值给`[]interface{}` 时往往会报错，（该类型不能赋值给 `[]interface{}` ）
+
+**原因分析：**
+
+​	`[]interface{}` 的类型不是 `interface{}`，他是一个切片，而切片的类型是 `interface{}`,这样解释可能比较绕口。换个角度，`interface{}` 占用两个字，一个字用于存放`interface{}` 的类型，另一个存放 `interface{}`的数据或指向数据的指针，**长度为 N 的`[]interface{}` 类型切片背后是 N*2 的一个长度数据**。这就与一般的 `[]Mytype([]string,[]int)` 不同，因此不能简单的将 `[]mytype` 赋值给 `[]interface{} `。
+
+**解决方案：** 
+
+​	如果我们必须使用 `[]interface{}` ，那么我们就必须一个一个的赋值，而不是 直接将 `[]type` 赋值给 `[]interface{}`。
+
+```go
+data := []string{"test","good","nice"}
+content := make([]interface{},len(data))
+for index, value := range data{
+    interface[i]= value
+}
+```
+
+
+
 ### string和slice
 
 `string` 底层是 `byte` 数组,因此`string`也可进行切片处理
@@ -272,3 +296,8 @@ replace（
 
 - `exclude`： 忽略指定版本的依赖包
 - `replace`：由于在国内访问golang.org/x的各个包都需要f.q，你可以在go.mod中使用replace替换成github上对应的库。
+- indirect:  间接依赖，或者没有列入到go.mod中的依赖。
+
+如下图所示，Module A 依赖 B，但是 B 还未切换成 Module，也即没有`go.mod`文件，此时，当使用`go mod tidy`命令更新A的`go.mod`文件时，B的两个依赖B1和B2将会被添加到A的`go.mod`文件中（前提是A之前没有依赖B1和B2），并且B1 和B2还会被添加`// indirect`的注释。
+
+![image-20220211110017799](https://raw.githubusercontent.com/yiwenqi/cloudimg/main/data/image-20220211110017799.png)
