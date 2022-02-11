@@ -38,3 +38,38 @@ $ go test foo...
 
 ###  GO SqlMock
 
+SqlMock用于进行数据库相关函数的替换，官网https://github.com/DATA-DOG/go-sqlmock中有大量例子可以参考。
+
+sqlmock 是一个实现了sql/driver的mock库。他只有一个目的就是用于模拟任何sql驱动行为再测试环境中，且不需要任何真是数据库的连接。
+
+- 这个库越来越完整且稳定
+- 支持并发和多连接
+- 支持go1.8的特性
+- 不需要修改任何源代码
+- 允许替换任何sql驱动方法
+- 有严格的期望顺序匹配
+- 没有第三方依赖
+
+**Install** 
+
+```bash
+go get github.com/DATA-DOG/go-sqlmock
+```
+
+**note**
+
+- `SqlMock` 中的 `expectedSQL` 有着一定的规则，不需要写出完整的`SQL`语句。只需要写到表即可。
+
+```go
+// select
+mock.ExpectPrepare("SELECT (.+) FROM `saas_main_dispatch_table`")
+// updata
+mock.ExpectExec("UPDATE products").WillReturnResult(sqlmock.NewResult(1, 1))
+// insert
+mock.ExpectExec("INSERT INTO product_viewers").WithArgs(2, 3).WillReturnResult(sqlmock.NewResult(1, 1))
+```
+
+
+
+
+
