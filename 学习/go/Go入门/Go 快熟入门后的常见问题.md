@@ -216,7 +216,7 @@ func main(){
 - 结构体中的指针，切片，map都是引用类型，需要先make，分配空间才可以使用。
 - 不同结构体中的变量互不影响，他们之间是独立的。
 
-结构体的使用方法：
+**结构体的使用方法：**
 
 - var  person Person
 - var person Person = Person{}
@@ -224,11 +224,118 @@ func main(){
   - new 出来的是一个指针类型，指向创建的结构体。
 - var person *Person = &Person{}
 
-当结构体变量为指针类型时，我们可以使用以下两种方式获取结构体值：
+**当结构体变量为指针类型时，我们可以使用以下两种方式获取结构体值：**
 
 - `(*person).Name`  //  不能将括号去掉，因为 `.` 的运算符比较高，去掉后`person.Name`没有问题，但是取到后还有一个 `* ` 这样就错了。
 - person.Name  
   - person.Name 在go程序的底层会转换成 ---> (*person).Name
+
+**结构体之间的赋值与转换**
+
+- 在结构体之中只有两个结构体字段数量，类型，名称都相同才能互相转换。
+
+- 结构体进行type重新定义（相当于取别名），Golang认为是新的数据结构类型不能相互赋值，但是可以进行强转后赋值：
+
+```go
+tyep Person struct{
+    name string
+    age  string
+}
+type Human Person
+
+func main(){
+    var p = Person{"zhangsan","18"}
+    var h Human = p //这是错误的不能互相转换
+    // go认为hume已经是一个新的类型了，而不是person类型。
+    // 如果一定要转可以强转
+    var h Human = Human(p)
+}
+```
+
+
+
+**为结构体中的字段打tag**
+
+该标签可以使用反射机制获取，主要用来序列化和反序列化。
+
+场景：go中的结构体往往对外开发的字段都是首字母大写，而进行json序列化后依然是大写，而规范返回的json字符串都是首字母小写的。
+
+解决方案：使用tag为字段打标签，而序列化时就会根据tag序列化。
+
+```go
+type Person struct{
+    Name string `json:name`
+    Age  string `json:age`
+}
+func main(){
+    p := Person{"zhangsan","18"}
+    b , _ := json.Marshal(p)
+    jsonStr := string(b)
+    fmt.Printf("%s\n",jsonStr)
+}
+```
+
+### 方法
+
+​		方法是与结构体绑定的，自定义struct也有方法。
+
+**方法的调用和传参**
+
+- func （p Person）speak(message string){ .... }
+
+  当该方法被调用的时候，message 和 **p** 都被拷贝了一份传给方法，与被调用的**p**结构体是独立的。
+
+- func （p *Person）speak(message string){ .... }
+
+  当该方法被调用的时候，message 拷贝了一份传给方法，同时被调用的**p的地址**也被传入。
+
+**方法的声明与定义：**
+
+​	func (recever type ) funcName (参数列表) （返回列表）
+
+​	eg:  func （p *Person）speak(message string){ .... }
+
+**方法的注意事项和细节讨论：**
+
+1）结构体类型是值类型，在方法调用中，遵守值类型的传递机制，是值拷贝传递方式。
+
+2）如果希望修改结构体中的值，则可以通过传入结构体指针的方式，func （p ***** Person）speak(message string){ .... }
+
+3）Golang的方法是作用在定义的数据类型上，而不仅仅是struct,比如int,float32
+
+```go
+tyep newInt int64
+func (i newInt) add（num1，num2 int）{}
+```
+
+4）方法的访问范围的规则和函数一样，首字母大写则可以给其他包访问，首字母小写则只能在本宝内访问。
+
+5）如果一个变量实现了 String() 这个方法则fmt.Println()默认会调用这个变量的 String() 进行输出。
+
+### 继承
+
+- `golang`中结构体可以使用嵌套匿名结构体所有的字段和方法，即首**字母大写或者小写**的**字段，方法**都可以使用。
+
+- 当我们对嵌套结构体进行访问时，会先访问绑定的结构体，然后进入嵌套的结构体中访问（套娃式深入）。当有相同的字段和方法时，会采取就近原则。
+
+- 当我们结构体中嵌入多个结构体，如果两个匿名结构体有相同的字段和方法（**同时结构体本身没有同名的字段与方法**）在访问时，就必须明确指定结构体的名字，否则会报错。
+- 如果一个struct嵌套了一个又名结构体,则为组合，如果是组合关系，那么在访问组合的结构体的字段时，必须带上结构体的名字。
+
+### 接口（interface）
+
+`interface`类型可以定义一组方法，但是这些方法不需要实现。并且interface不能包含任何变量。
+
+**基本语法**
+
+type 接口名 interface{
+
+​        method1   (参数列表) （返回列表）
+
+ 	   method2  (参数列表) （返回列表）
+
+}
+
+**说明**：`Golang `中接口不需要显示的实现，当某个变量实现了接口中的所有方法，那么这个变量就实现了这个接口。因此`golang`中没有 `implement`
 
 ## GO体系学习
 
