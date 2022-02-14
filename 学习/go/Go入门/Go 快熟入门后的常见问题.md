@@ -331,11 +331,127 @@ type 接口名 interface{
 
 ​        method1   (参数列表) （返回列表）
 
- 	   method2  (参数列表) （返回列表）
+​		method2  (参数列表) （返回列表）
 
 }
 
 **说明**：`Golang `中接口不需要显示的实现，当某个变量实现了接口中的所有方法，那么这个变量就实现了这个接口。因此`golang`中没有 `implement`
+
+**方法的注意细节：**
+
+- 接口本身不能创建实例，但可以指向一个实现了该接口的自定义类型的变量（实例）
+
+```go
+main(){
+    var stu Stu  // Stu 实现了 Person接口
+    var p Person = stu
+}
+```
+
+- 接口中所有的方法都没有方法体；
+- Golang中需要实现某个接口的所有方法，才能说是实现了该接口
+- 只要是自定义数据类型都可以实现接口，不只是结构体
+- 一个自定义数据类型可以实现多个接口
+- 一个方法不能有变量
+- 一个接口也可以继承其它接口，实现时需要全部实现
+- **interface类型默认是一个指针类型(引用类型)，如果没有对interface进行初始化就是用，那么会输出nil。**
+- **空接口interface{}没有任何方法，所以所有类型都实现了空接口 **   。**即可以把任何变量赋值给空接口 **。
+
+```go
+type T interface{}
+main() {
+    var stu Stu
+    // 赋值给空接口
+    var a T = stu 
+    // 或者
+    var a2 interface{} = stu
+}
+```
+
+**方法注意点：**
+
+- 接口实现只关注方法名，但是同一个接口中不能有相同的方法签名（包括继承的接口），
+- 方法实现中加 `*` 与不加是有区别的：
+
+```go
+type Usb interface{
+    Say()
+}
+type Stu struct{}
+func (this *Stu) Say(){
+    fmt.Print("Say hello ~")
+}
+main(){
+    var stu Stu
+    // 错误代码，因为 stu 并没有实现Say，而是 *Stu 实现了
+    var u Usb = stu
+    // 因此只需要把 Stu 改成 &Stu即可
+    var u Usb = &stu
+    u.
+}
+```
+
+### 多态
+
+变量(实例)具有多种形态。面对对象的第三大特征，在Go语言中，多态特征是通过接口实现的。可以按照统一接口来调用不同的实现，这时接口变量就展现出不同的形态。
+
+**多态参数：**
+
+```go
+type Usb interface{...}
+// 当phone和photo都实现了Usb接口时，该方法的变量 u 可以接收不同的实例
+func Working(u Usb){}
+```
+
+**多态数组：**
+
+```go
+// phone 和 Camera 都实现了Usb接口
+type Usb interface{...}
+main () {
+    var usb [3]Usb
+    // Usb 接口数组可以存放实现列 Usb接口的变量 
+    usb[0] = Phone{}
+    usb[1] = Camera{}
+}
+```
+
+### 类型断言
+
+类型断言，由于接口是一般类型，不知道具体类型，如果要转成具体类型，就需要使用类型断言。
+
+```go
+type Sutdent struct{
+    Name string
+}
+func main(){
+    stu := Student{"zhangsan"}
+    var a interface{} = stu 
+    // 此时不能将 a 赋给 student 类型变量
+    // var b Student = a
+    // 需要使用类型断言
+    var b Student = a.(Student)
+    // 带判断的类型断言
+    c , ok := a.(Studnet)
+    if ok {
+        fmt.Print("d")
+    }
+}
+```
+
+### 文件操作
+
+os.File 包中封装了所有的文件操作。
+
+**打开文件和关闭文件**
+
+```go
+// name 为文件路径，file 有时也叫文件对象，文件句柄，file指针
+func Open(name string)(file *file , err error){}
+func (file *file) Close() err error{}
+```
+
+
 
 ## GO体系学习
 
