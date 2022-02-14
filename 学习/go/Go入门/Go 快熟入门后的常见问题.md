@@ -524,3 +524,16 @@ replace（
 如下图所示，Module A 依赖 B，但是 B 还未切换成 Module，也即没有`go.mod`文件，此时，当使用`go mod tidy`命令更新A的`go.mod`文件时，B的两个依赖B1和B2将会被添加到A的`go.mod`文件中（前提是A之前没有依赖B1和B2），并且B1 和B2还会被添加`// indirect`的注释。
 
 ![image-20220211110017799](https://raw.githubusercontent.com/yiwenqi/cloudimg/main/data/image-20220211110017799.png)
+
+- incompatible：当版本大于`V1`版本之后，由于作者在 `Module`名字没有遵循`go`规范（xxx/xxx/V2）。由于Module为不规范的Module，为了加以区分，go 命令会在`go.mod`中增加`+incompatible` 标识。
+
+### GOMOD 迁移
+
+目标：GOPATH项目会导致依赖冗余(每个人用不同版本的依赖，导致依赖下载到包中，出现包过于大，依赖冗余)
+
+GOPATH的缺点：
+
+-  项目代码库膨胀厉害（直接提交第三方库源码）
+- 不知道依赖库的版本
+- 依赖库更新方式不友好
+- 如果更新依赖库时，可能存在不兼容情况
