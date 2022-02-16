@@ -277,6 +277,10 @@ $git remote rm paul
 
 
 
+#### 从远程仓库同步代码到本地。
+
+
+
 #### 打标签
 
 ```bash
@@ -374,5 +378,22 @@ $ git push [远程名]  :[远程分支]
 ```bash
  $ git push --set-upstream <远程仓库别名> <分支名>
  $ git push --set-upstream origin dev/unittest
+```
+
+#### Git提测
+
+当有需要测试的代码，那么我们需要新建一个测试分支，将我们的代码合并到测试分支。
+
+```git
+// 切换到测试分支
+$ git checkout test/module
+// 拉去最新代码
+$ git status
+$ git pull
+// 切回dev/module
+$ git checkout dev/module
+// 合并test/module
+$ git merge test/module
+// 在网页上再提交合并申请
 ```
 

@@ -455,9 +455,11 @@ func (file *file) Close() err error{}
 
 ## GO体系学习
 
-#### GOPATH
+### GOPATH
 
 GOPATH，用于指向工作目录。如果我们使用环境变量来切换我们的工作目录会异常麻烦，且容易误操作。在IDE集成工具中我们可以在设置中设置项目的GOPATH。
+
+注意：GOPATH目录和GOPATH下的src不应该添加到源代码管理中，而是各个project目录myApp1、myApp2、myApp3各自时独立的进行源代码管理
 
 多项目中使用GOPATH：
 
@@ -480,7 +482,7 @@ GOPATH在不同平台上的安装路径
 | $GOPATH/bin | 在工程经过 go build、go install 或 go get 等指令后产生的二进制可执行文件 |      |
 | $GOPATH/pkg | 中间缓存文件                                                 |      |
 
-#### GOMOD
+### GOMOD
 
 GOMOD 在v1.11版本中正式推出。在1.11时env多了一个环境变量： `GO111MODULE` ,`GO111MODULE` 是一个开关，通过它可以开启或关闭 go mod 模式。他有三个可选值：`off`、`on`、`auto`，默认值是`auto`。
 
@@ -527,6 +529,34 @@ replace（
 
 - incompatible：当版本大于`V1`版本之后，由于作者在 `Module`名字没有遵循`go`规范（xxx/xxx/V2）。由于Module为不规范的Module，为了加以区分，go 命令会在`go.mod`中增加`+incompatible` 标识。
 
+**GO MOD 常见命令：**
+
+```go
+# 查看支持哪些选项
+✗ go help mod
+ 
+# 初始化 go mod
+# go mod init [host/namespace/module-name]，比如
+✗ go mod init code.aliyun.com/arch/be-derive
+ 
+# 拉取缺少的模块，移除不用的模块
+✗ go mod tidy
+ 
+# 列出当前模块及其所有依赖项
+✗ go list -m all
+ 
+# 查看为什么依赖某个包
+✗ go mod why code.aliyun.com/module-go/irpc
+be-derive/dist/dist/config imports
+ 
+# 打印模块依赖图
+go mod graph
+```
+
+### GOBIN
+
+go install/build 编译存放二进制可执行文件的路径。不可以设置多个，可以为空，为空时，遵循约定优于配置的原则。约定：二进制可执行文件放在GOPATH/bin目录下，前提是main.go不能直接存放在GOPATH/src目录下。
+
 ### GOMOD 迁移
 
 目标：GOPATH项目会导致依赖冗余(每个人用不同版本的依赖，导致依赖下载到包中，出现包过于大，依赖冗余)
@@ -537,3 +567,56 @@ GOPATH的缺点：
 - 不知道依赖库的版本
 - 依赖库更新方式不友好
 - 如果更新依赖库时，可能存在不兼容情况
+
+GoModule迁移的好处：
+
+- 目录结构更加清晰，在GOPATH的管理下，src目录中不仅有核心代码，还有依赖代码。在不知道核心代码目录的情况下容易混淆。
+
+- 减少项目大小，无需将依赖下载到项目中。部署时在部署环境下载依赖。
+
+- 版本管理更加方便。go.mod中可以非常便捷快速的切换依赖版本。
+- 更加灵活，无需将项目放入GOPATH路径下。
+
+#### 迁移方案
+
+1、首先改变项目结构，将src下的依赖包全部删除，只留下核心代码目录(shumei...)，并移动到根目录。
+
+---- main-interface
+
+​	---- dist 
+
+​	---- shumei
+
+2、创建go.mod文件
+
+```go
+# init 后面跟的名字为module名称，当我们引用项目中其他包的时候需要在前面加上module名称
+$ go mod init 远程仓库名/项目组/项目名
+$ go mod init code.aliyun.com/nextdata/re-cloudconf
+# 获取依赖
+$ go mod tidy 
+```
+
+**注意获取依赖所需环境：**
+
+设置：
+
+- GO111MODULE=on/auto
+
+- GONOPROXY=code.aliyun.com
+
+- 如果使用了集成工具则需要开启GOMOD
+
+  <img src="https://raw.githubusercontent.com/yiwenqi/cloudimg/main/data/image-20220216115135803.png" alt="image-20220216115135803 " style="zoom: 80%;" />
+
+- 设置GOPATH。我们使用Go Module进行依赖下载，下载后的依赖放在GOPATH文件的pkg/mod中。因此需要设置全局GOPATH（1），或者使用系统定义的变量（2），此时会在（1）中自动设置。
+
+  <img src="https://raw.githubusercontent.com/yiwenqi/cloudimg/main/data/image-20220216115537077.png" style="zoom:80%;" />
+
+3、修改脚本。
+
+​	修改build.sh脚本，将GOPATH设置注释，同时设置GOBIN。
+
+![image-20220216120008047](https://raw.githubusercontent.com/yiwenqi/cloudimg/main/data/image-20220216120008047.png)
+
+4、修改脚本后build ,init .start check.sh自测是否成功。
