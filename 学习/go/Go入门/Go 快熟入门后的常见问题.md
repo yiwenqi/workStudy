@@ -459,7 +459,26 @@ func Open(name string)(file *file , err error){}
 func (file *file) Close() err error{}
 ```
 
+**带缓冲的Reader读文件**
 
+使用范围：大文件
+
+eg: 1T的文件直接加入内存，会将内存撑爆。
+
+```
+// 使用bufio.NewReader 获取一个缓存流的读取方式，默认缓存4096个字节。
+```
+
+**一次性读取文件：**使用ioutil包中的方法
+
+使用范围：小文件
+
+eg：小文件可以直接加入内存，无较大影响
+
+```	
+// ioutil.ReaderFile()
+
+```
 
 ## GO体系学习
 
