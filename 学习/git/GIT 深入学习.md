@@ -151,6 +151,47 @@ $ git push -f
 
 如果是忘记提交某些修改了，则可以补上暂存操作 （`git add`）然后允许此命令，即可补上。
 
+#### 回滚操作
+
+- 文件已经修改 但是还没进行add操作 想要还原文件
+
+```go
+git checkout 指定文件
+git checkout . (还原全部文件)
+```
+
+- 文件能做出修改 已经add操作 但是还没commit 想要删除add
+
+```git
+git reset HEAD 撤销全部已提交的修改
+git reset HEAD filename 撤销对指定文件的修改
+```
+
+- 文件做出修改已经`commit` 但是还没有`push` 想要删除`commit`
+
+```git
+git log 查看节点
+git reset commit_id
+```
+
+- 文件已经push到仓库
+
+  - 此次操作之前和之后的commit和history都会保留，并且把这次撤销座位一次最新的提交
+
+  ```git
+  git revert是提交一个新的版本，将需要revert的版本的内容再反向修改回去，版本会递增，不影响之前提交的内容。
+  git revert HEAD  撤销前一次 commit
+  git revert HEAD^  撤销前前一次 commit
+  git revert commit-id  (撤销指定的版本，撤销也会作为一次提交进行保存）
+   
+  git reset是指将HEAD指针指到指定提交，历史记录中不会出现放弃的提交记录。
+  $ git reset --hard HEAD^         回退到上个版本
+  $ git reset --hard HEAD~3        回退到前3次提交之前，以此类推，回退到n次提交之前
+  $ git reset --hard commit_id     退到/进到 指定commit的sha码
+  强推到远程
+  $ git push origin HEAD --force
+  ```
+
 #### 多次修改后合并commit
 
 ```bash
@@ -184,9 +225,9 @@ git rm --cached Xml/config.xml
 
 
 
-### 本地仓库
+### 储存(Stashing)
 
-### 暂存本地修改（Stashing）
+#### 暂存本地修改（Stashing）
 
 场景：经常有这样的事情发生，当你正在进行项目中某一部分的工作，里面的东西处于一个比较杂乱的状态，而你想转到其他分支上进行一些工作。问题是，你不想提交进行了一半的工作，否则以后你无法回到这个工作点。解决这个问题的办法就是`git stash`命令。
 
@@ -207,9 +248,30 @@ $ git status
     #
     # modified: lib/simplegit.rb
     #
+$ git stash
 ```
 
-查看
+#### 查看储存栈
+
+```git
+$ git stash list
+	stash@{0}: WIP on master: 049d078 added the index file
+    stash@{1}: WIP on master: c264051... Revert "added file_size"
+    stash@{2}: WIP on master: 21d80a5... added number to log
+```
+
+#### 恢复的储存的尚未提交文件
+
+1. ```git
+   $ git stash apply #(恢复最近的一次储存) 
+   $ git stash apply stash@{2} #恢复指定的一次
+   ```
+
+#### 移除储存栈
+
+```git
+$ git stash drop stash@{0}
+```
 
 ### 远程仓库
 
@@ -300,6 +362,7 @@ $git tag -a 'V1.2' //打标签v1.2
 
 ```bash
 $ git branch 
+$ git branch -a  //查看本地和远程的所有分支
 ```
 
 #### 新建分支
@@ -397,3 +460,10 @@ $ git merge test/module
 // 在网页上再提交合并申请
 ```
 
+### 分支衍合
+
+呃，奇妙的衍合也并非完美无缺，要用它得遵守一条准则：
+
+**一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。**
+
+风险：当我们将已经提交到公共库中的分支进行衍合操作，那么在公共库中就会放弃之前的提交创建一个新的提交，而如果在你衍合之前有人拉取了你的分支代码并进行了开发，那么当他再次拉去的时候，历史记录中放弃了之前的提交，出现了一个新的提交，那么他会进行两次重复（衍合之前提交的代码，衍合的之后的提交）的合并。

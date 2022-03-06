@@ -1,6 +1,6 @@
 ## 网络基础--HTTP 深入研究
 
-### HTTP 概述
+### HTTP 概述(超文本传输协议)
 
 HTTP是一种能够获取如HTML这样的网络资源的`protocol`（通讯协议）。他是在Web上进行数据交换的基础，是一种client-server协议。
 
