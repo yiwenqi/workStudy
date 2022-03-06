@@ -1,4 +1,5 @@
-﻿<%@ page import="java.util.Date" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -28,20 +29,13 @@
             </div>
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 top_rig">
                 <div class="row">
-                    <%
-                        Date d = new Date();
-                        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-                        String now = df.format(d);
-                    %>
                     <div id="now_time" class="col-lg-7 col-md-8 col-sm-8 col-xs-8 time" >14:54</div>
                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4 margin-top_10">
                         <div id="now_mouth" class="date">10<b>月</b>6<b>日</b></div>
                         <div id="now_week" class="cycle">星期一</div>
                     </div>
                     <c:if test="${sessionScope.us.name != null}" var="resutl" >
-                        <c:if test="${result}" >
                             <h4 class="col-lg-8 col-md-8 col-sm-8 welcome" style="display: block;">欢迎您：<b>${us.name}同学</b></h4>
-                        </c:if>
                     </c:if>
 
                     <a href="/to/login" class="button button-3d button-caution col-lg-4 col-md-4 col-sm-4 col-xs-4">登录</a>
@@ -191,16 +185,22 @@
                                 <div class="col-llg-3 col-lg-3 col-md-3 col-sm-3  col-xs-3  text-center  font18">
                                     结束时间
                                 </div>
-                                <form>
+
+                                <%-- 时间表单元素 --%>
+                                <input id="time" name="time" type="text" hidden="hidden">
                                 <div id="date" class="col-llg-5 col-lg-5 col-md-5 col-sm-5  col-xs-5 ">
                                 </div>
 
+                                <%-- 开始时间表单元素 --%>
+                                <input id="startTime" name="startTime" type="text" hidden="hidden">
                                 <div id="time_s" class="col-llg-3 col-lg-3 col-md-3 col-sm-3  col-xs-3 ">
                                 </div>
 
                                 <div class="col-llg-1 col-lg-1 col-md-1 col-sm-1  col-xs-1 zhi hidden-xs">
                                     至
                                 </div>
+                                <%-- 结束时间表单元素 --%>
+                                <input id="endTime" name="endTime" type="text" hidden="hidden">
                                 <div id="time_e" class="col-llg-3 col-lg-3 col-md-3 col-sm-3  col-xs-3 ">
                                 </div>
                                 </form>
@@ -231,33 +231,18 @@
                                             <div class="input-group-btn">
                                                 <button aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" class="btn btn-default dropdown-toggle  input-lg" type="button"> <span class="caret"></span></button>
                                                 <ul id="room" class="dropdown-menu dropdown-menu-right">
-                                                    <li>
-                                                        闵行分校
+                                                    <li>南校区
                                                         <ul>
-                                                            <li>
-                                                                新馆
-                                                                <ul>
-                                                                    <li>1F</li>
-                                                                    <li>2F</li>
-                                                                    <li>3F</li>
-                                                                    <li>4F</li>
-                                                                </ul>
-                                                            </li>
-                                                            <li>
-                                                                老馆
-                                                                <ul>
-                                                                    <li>1F</li>
-                                                                    <li>2F</li>
-                                                                    <li>3F</li>
-                                                                </ul>
-                                                            </li>
-                                                            <li>
-                                                                逸夫馆
-                                                                <ul>
-                                                                    <li>1F</li>
-                                                                    <li>2F</li>
-                                                                </ul>
-                                                            </li>
+                                                            <c:forEach items="${sschools}" var="school"  varStatus="status">
+                                                                    <li>${school.bname}</li>
+                                                            </c:forEach>
+                                                        </ul>
+                                                    </li>
+                                                    <li>北校区
+                                                        <ul>
+                                                            <c:forEach items="${nschools}" var="school"  varStatus="status">
+                                                                <li>${school.bname}</li>
+                                                            </c:forEach>
                                                         </ul>
                                                     </li>
                                                 </ul>
@@ -271,342 +256,28 @@
                                     </div>
                                 </div>
                                 <div class="reservation margin-top_20 clearfix">
-                                    <div class="col-llg-4  col-lg-6  col-md-6  col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20 red-bs-example" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-llg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="yellow"></i>
+                                    <input id="select_room" name="room" type="text" hidden="hidden">
+                                    <c:forEach items="${rooms}" var="room" varStatus="status">
+                                        <div class=" col-llg-4  col-lg-6  col-md-6  col-sm-12  col-xs-12">
+                                            <div id="${room.name}" class="room bs-example margin-bot_20 " data-example-id="default-media">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <h4 class="media-heading font30">${room.name}自习室</h4>
+                                                        <p>剩余座位数：${room.last}个</p>
+                                                        <c:if test="${room.last>(room.last/2)}" var="res">
+                                                            <i class="green"></i>
+                                                        </c:if>
+                                                        <c:if test="${room.last<(room.last/2)}" var="result">
+                                                            <i class="yellow"></i>
+                                                        </c:if>
+                                                        <c:if test="${room.last<(room.last/3)}" var="res">
+                                                            <i class="red"></i>
+                                                        </c:if>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6 col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="red"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6  col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20 red-bs-example" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-llg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="yellow"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6  col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20 red-bs-example" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-llg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="yellow"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6 col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="red"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6  col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20 red-bs-example" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-llg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="yellow"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6  col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20 red-bs-example" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-llg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="yellow"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6 col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="red"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6  col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20 red-bs-example" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-llg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="yellow"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    1F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-llg-4  col-lg-6  col-md-6   col-sm-12  col-xs-12">
-                                        <div class="bs-example margin-bot_20" data-example-id="default-media">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    2F
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading font30">西区C2阅览室</h4>
-                                                    <p>剩余座位数：12个</p>
-                                                    <i class="green"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </c:forEach>
                                 </div>
                             </div>
                             <!--选座位-->
@@ -632,80 +303,9 @@
                                 <div class="fclear"></div>
                                 <div class="seat margin-top_70 clearfix">
                                     <div class="icon_lists">
+
                                         <div class="icon iconfont">&#xe600;<b>01</b></div>
                                         <div class="icon iconfont current">&#xe600;<b>02</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
-                                        <div class="icon iconfont">&#xe600;<b>01</b></div>
                                     </div>
                                 </div>
                                 <div style="position:fixed; left:20px; top:20px; z-index:9999999; width:1900px;">
@@ -971,7 +571,11 @@
                 display: 'inline',
                 layout: 'liquid',
                 mode: 'mixed',
-                minWidth: 50
+                minWidth: 50,
+                onSelect: function (valueText, inst) {//选择时事件（点击确定后），valueText 为选择的时间，
+                    var selectedDate = valueText;
+                    $("#time").val(selectedDate)
+                }
             });
             $('#time_s').mobiscroll().time({
                 theme: 'my-red',
@@ -979,7 +583,11 @@
                 display: 'inline',
                 layout: 'liquid',
                 mode: 'mixed',
-                minWidth: 50
+                minWidth: 50,
+                onSelect: function (valueText, inst) {//选择时事件（点击确定后），valueText 为选择的时间，
+                    var selectedDate = valueText;
+                    $("#startTime").val(selectedDate)
+                }
             });
             $('#time_e').mobiscroll().time({
                 theme: 'my-red',
@@ -987,7 +595,11 @@
                 display: 'inline',
                 layout: 'liquid',
                 mode: 'mixed',
-                minWidth: 50
+                minWidth: 50,
+                onSelect: function (valueText, inst) {//选择时事件（点击确定后），valueText 为选择的时间，
+                    var selectedDate = valueText;
+                    $("#endTime").val(selectedDate)
+                }
             });
             /**************end*******************/
             $(".icon_lists span").click(function () {
@@ -1024,13 +636,43 @@
 
 
             /*****************走全页面（可删）*****************/
+            /** 点击自习室选择 **/
+            $(".room").click(function (){
+                $("#select_room").val(this.id);
+                $(".red-bs-example").removeClass("red-bs-example")
+                $(this).addClass("red-bs-example");
+                $.ajax({
+                    url:"http://localhost:8081/find/room"
+                })
+            })
+
+
             $(".nav-li").click(function () {
                 var indexs = $(this).index();
                 $(this).addClass("ee").siblings().removeClass("ee");
                 $(".prolist").eq(indexs).show().siblings(".prolist").hide();
                 $("#shijian_next").click(function () {
-                    $("#shijian").hide();
-                    $("#didian").show();
+                    var time  = new Date($("#time").val().replaceAll("-", "/"));
+                    var start = $("#startTime").val();
+                    var end = $("#endTime").val();
+                    if (time.getFullYear() < myDate.getFullYear()){
+                        alert("设置年份错误！")
+                        return ;
+                    }
+                    if(time.getMonth() < myDate.getMonth() && time.getFullYear() == myDate.getFullYear()){
+                        alert("设置月份错误！")
+                        return ;
+                    }
+                    if(time.getDate() < myDate.getDate() && time.getFullYear() == myDate.getFullYear() && time.getMonth() == myDate.getMonth() ){
+                        alert("设置日期错误！")
+                        return ;
+                    }
+                    if (CompareDateAndNow(start,end) ){
+                        $("#shijian").hide();
+                        $("#didian").show();
+                    }else{
+                        alert("起止时间设置错误！")
+                    }
                 })
                 $("#time_previou").click(function () {
                     $("#didian").hide();
@@ -1099,5 +741,35 @@
     document.getElementById("now_time").innerHTML = myDate.getHours()+":"+myDate.getMinutes()
     document.getElementById("now_mouth").innerHTML = (myDate.getMonth()+1)+"<b>月</b>"+myDate.getDate()+"<b>日</b>"
     document.getElementById("now_week").innerHTML = week
+
+   /* $(".nav-li").click(function () {
+        // 添加表单元素
+        var dw_i = document.querySelectorAll(".dw-i")
+        for (let i = 0; i < dw_i.length; i++) {
+            if (dw_i[i].innerHTML == myDate.getFullYear()){
+                dw_i[i].innerHTML = myDate.getFullYear() + '<input name="year" hidden="hidden" type="text" value="'+myDate.getFullYear()+'">'
+            }
+            if (dw_i[i].innerHTML == myDate.getMonth()+1){
+                dw_i[i].innerHTML = myDate.getMonth()+1 + '<input name="month" hidden="hidden" type="text" value="'+(myDate.getMonth()+1)+'">'
+            }
+            if (dw_i[i].innerHTML == myDate.getDate()){
+                dw_i[i].innerHTML = myDate.getDate() + '<input name="data" hidden="hidden" type="text" value="'+(myDate.getDate())+'">'
+            }
+        }
+        // 添加开始时间表单
+        var time_s = $("#time_s").find(dw_i)
+        console.log(time_s)
+    })*/
+    function CompareDateAndNow(start,end) {
+        var date = new Date();
+        var a = start.split(":");
+        var b = end.split(":");
+        if(date.setHours(a[0],a[1]) < date.setHours(b[0],b[1])){
+            return date.setHours(a[0],a[1]) > myDate.getHours();
+        }else{
+            return false;
+        }
+    }
+
 </script>
 </html>

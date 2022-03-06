@@ -1,10 +1,10 @@
 package com.itheima.controller;
 
 
-import com.itheima.po.Admin;
-import com.itheima.po.PageInfo;
-import com.itheima.po.User;
+import com.itheima.po.*;
 import com.itheima.service.AdminService;
+import com.itheima.service.RoomService;
+import com.itheima.service.SchoolService;
 import com.itheima.service.UserService;
 import com.itheima.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,10 @@ public class UserController {
 	private AdminService adminService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private SchoolService schoolService;
+	@Autowired
+	private RoomService roomService;
 	/**
 	 * 用户登录
 	 */
@@ -40,11 +44,19 @@ public class UserController {
 		// 通过账号和密码查询用户
 		user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
 		User us = userService.findUser(user);
+		List<School> schools = schoolService.findAllSchool();
+		List<School> sschools = schoolService.findAllBuildsBySchool("南校区");
+		List<School> nschools = schoolService.findAllBuildsBySchool("北校区");
+		List<Room> rooms = roomService.findAllRoomByBuild(1);
+		model.addAttribute("sschools",sschools);
+		model.addAttribute("nschools",nschools);
+		model.addAttribute("rooms",rooms);
 		if(us!=null){
 			session.setAttribute("us", us);
 			return "index";
 		}
 		model.addAttribute("msg", "用户名或密码错误，请重新登录！");
+
 		return "login";
 	}
 
