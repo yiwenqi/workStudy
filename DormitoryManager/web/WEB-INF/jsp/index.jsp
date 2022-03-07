@@ -639,10 +639,18 @@
             /** 点击自习室选择 **/
             $(".room").click(function (){
                 $("#select_room").val(this.id);
+                id = this.id
                 $(".red-bs-example").removeClass("red-bs-example")
                 $(this).addClass("red-bs-example");
                 $.ajax({
-                    url:"http://localhost:8081/find/room"
+                    type:  "POST",
+                    url:   "http://localhost:8081/find/room",
+                    data:  {
+                        name:id
+                    },
+                    success:function (data){
+                        console.log(data)
+                    }
                 })
             })
 

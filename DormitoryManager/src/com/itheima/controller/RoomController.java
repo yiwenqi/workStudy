@@ -51,5 +51,4 @@ public class RoomController {
 
 		return selectRoom;
 	}
-
 }

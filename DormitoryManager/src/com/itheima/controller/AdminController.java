@@ -46,6 +46,12 @@ public class AdminController {
 		return "login";
 	}
 
+	@RequestMapping(value = "/admin")
+	public String toLogin( Model model, HttpSession session, HttpServletRequest request) {
+		// 通过账号和密码查询用户
+		return "login_admin";
+	}
+
 	/**
 	 * 退出登录
 	 */
