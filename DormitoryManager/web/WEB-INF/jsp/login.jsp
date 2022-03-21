@@ -6,11 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="/css/usersLogin.css">
     <link rel="icon" href="/images/favicon.ico" sizes="32x32" />
-    <script src="/js/jquery-1.3.2.min.js"></script>
+    <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="js/login.js"></script>
 
     <title>前台首页</title>
@@ -21,7 +22,7 @@
 
 </div>
 
-<div class="body">
+<div class="body" style="background: url('/images/timg-1.jpg')">
     <div class="panel">
         <div class="top">
             <p>账户登陆</p>
