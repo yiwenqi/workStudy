@@ -13,10 +13,11 @@ public interface ClassDao {
 	 * 进行分页查询
 	 */
 
+	// classname -- name   classid --- roomid  counsellor --- buildname
 	 //获取总条数
      public Integer totalCount(@Param("c_classname") String c_classname, @Param("c_classid") Integer c_classid, @Param("c_counsellor") String c_counsellor);
 	 //获取用户列表
-     public List<Class> getClassList(@Param("c_classname") String c_classname, @Param("c_classid") Integer c_classid, @Param("c_counsellor") String c_counsellor, @Param("currentPage") Integer currentPage, @Param("pageSize") Integer pageSize);
+     public List<Class> getClassList(@Param("name") String name, @Param("roomid") Integer roomid, @Param("buildname") String buildname, @Param("currentPage") Integer currentPage, @Param("pageSize") Integer pageSize);
 
 	public int deleteClass(Integer c_id);   //删除班级信息
 	public int addClass(Class ucalss);    //添加班级信息

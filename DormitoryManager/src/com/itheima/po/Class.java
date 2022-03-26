@@ -3,43 +3,43 @@ package com.itheima.po;
 import java.util.List;
 
 public class Class {
-    private  Integer c_id;
-    private  Integer c_classid;
-    private  String  c_classname;
-    private  String  c_counsellor;
+    private  Integer roomid;
+    private  String buildname;
+    private  String  name;
+    private  String  num;
     //班级与学生为一对多关系，使用链表
     private List<Student>  students;
 
-    public Integer getC_id() {
-        return c_id;
+    public Integer getRoomid() {
+        return roomid;
     }
 
-    public void setC_id(Integer c_id) {
-        this.c_id = c_id;
+    public void setRoomid(Integer roomid) {
+        this.roomid = roomid;
     }
 
-    public Integer getC_classid() {
-        return c_classid;
+    public String getBuildname() {
+        return buildname;
     }
 
-    public void setC_classid(Integer c_classid) {
-        this.c_classid = c_classid;
+    public void setBuildname(String buildname) {
+        this.buildname = buildname;
     }
 
-    public String getC_classname() {
-        return c_classname;
+    public String getName() {
+        return name;
     }
 
-    public void setC_classname(String c_classname) {
-        this.c_classname = c_classname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getC_counsellor() {
-        return c_counsellor;
+    public String getNum() {
+        return num;
     }
 
-    public void setC_counsellor(String c_counsellor) {
-        this.c_counsellor = c_counsellor;
+    public void setNum(String num) {
+        this.num = num;
     }
 
     public List<Student> getStudents() {

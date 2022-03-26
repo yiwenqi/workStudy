@@ -91,7 +91,7 @@
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe723;</i>
-                    <cite>班级管理</cite>
+                    <cite>教学楼管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
@@ -99,17 +99,17 @@
                         <a _href="/findClass">
                             <%--点击在右侧出现动态的Tab--%>
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>班级列表</cite>
+                            <cite>教室列表</cite>
                         </a>
                     </li >
 
-                    <li>
+                   <%-- <li>
                         <a _href="/findClassStudent">
-                            <%--点击在右侧出现动态的Tab--%>
+                            &lt;%&ndash;点击在右侧出现动态的Tab&ndash;%&gt;
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>班级学生</cite>
                         </a>
-                    </li >
+                    </li >--%>
                 </ul>
             </li>
 

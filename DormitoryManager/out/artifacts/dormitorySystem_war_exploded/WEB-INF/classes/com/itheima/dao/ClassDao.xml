@@ -5,65 +5,65 @@
 
     <!--分页查询-->
     <select id="getClassList" parameterType="Class" resultType="Class">
-        select *from d_class
+        select * from room
         <where>
-            <if test="c_classname!=null and c_classname!='' ">
-                and  c_classname like  '%${c_classname}%'
+            <if test="roomid!=null and roomid!='' ">
+                and  roomid like  '%${roomid}%'
             </if>
-            <if test="c_counsellor!=null and c_counsellor!=''">
-                and  c_counsellor like  '%${c_counsellor}%'
+            <if test="buildname!=null and buildname!=''">
+                and  buildname like  '%${buildname}%'
             </if>
-            <if test="c_classid!=null and c_classid!=0">
-                and  c_classid like  '%${c_classid}%'
+            <if test="name!=null and name!=0">
+                and  name like  '%${name}%'
             </if>
         </where>
-        ORDER BY  c_id asc
+        ORDER BY  roomid asc
         limit #{currentPage},#{pageSize}
     </select>
     <!--查询数据总数-->
     <select id="totalCount"  resultType="Integer">
-        select count(c_id) from d_class
+        select count(roomid) from room
         <where>
             <if test="c_classname!=null and c_classname!='' ">
-                and  c_classname like  '%${c_classname}%'
+                and  name like  '%${c_classname}%'
             </if>
             <if test="c_counsellor!=null and c_counsellor!=''">
-                and  c_counsellor like  '%${c_counsellor}%'
+                and  buildname like  '%${c_counsellor}%'
             </if>
             <if test="c_classid!=null and c_classid!=0">
-                and  c_classid like  '%${c_classid}%'
+                and  roomid like  '%${c_classid}%'
             </if>
           </where>
     </select>
 
     <!--通过id删除班级信息-->
     <delete id="deleteClass" parameterType="Integer" >
-        delete from d_class where c_id=#{c_id}
+        delete from room where roomid=#{c_id}
     </delete>
     <!--添加班级信息-->
-    <insert id="addClass" parameterType="Class" keyProperty="c_id" useGeneratedKeys="true">
-        insert into d_class (c_classid,c_classname,c_counsellor)
-        values(#{c_classid},#{c_classname},#{c_counsellor})
+    <insert id="addClass" parameterType="Class" keyProperty="roomid" useGeneratedKeys="true">
+        insert into room (buildname,name,num)
+        values(#{buildname},#{name},#{num})
     </insert>
 
     <select id="findClassById"  parameterType="Integer" resultType="Class" >
-        select * from d_class where c_id=#{c_id}
+        select * from room where roomid=#{c_id}
     </select>
     <!--修改班级信息-->
     <update id="updateClass" parameterType="Class">
-        update d_class
+        update room
         <set>
             <if test="c_classid!=null and c_classid!=0">
-                c_classid=#{c_classid},
+                buildname=#{buildname},
             </if>
             <if test="c_classname !=null and c_classname !=''">
-                c_classname=#{c_classname},
+                name=#{name},
             </if>
             <if test="c_counsellor !=null and c_counsellor !=''">
-                c_counsellor=#{c_counsellor},
+                num=#{num},
             </if>
         </set>
-        where c_id = #{c_id}
+        where roomid = #{roomid}
     </update>
 
     <!--Mybatis使用Collection进行表关联查询关联一对多数据类型(class为一，student为多)，且需要有id-->
@@ -89,17 +89,13 @@
 
     <!--SQL选择属性与构造的resultMap属性名要一致-->
     <select id="findClassStudent" parameterType="Class" resultMap="cardAndInfo2">
-        SELECT uclass.c_id as c_id,uclass.c_classid as c_classid,uclass.c_classname as c_classname,uclass.c_counsellor as c_counsellor,
-        student.s_id as s_id,student.s_studentid as s_studentid,student.s_name as s_name,student.s_sex as s_sex,student.s_age as s_age,
-        student.s_phone as s_phone,student.s_classid as s_classid,student.s_classname as s_classname,student.s_dormitoryid as s_dormitoryid
-        FROM d_class uclass join d_student student
-        on uclass.c_classid = student.s_classid
-        and uclass.c_classname = student.s_classname
-        where uclass.c_classid = #{c_classid}
-        and uclass.c_classname = #{c_classname}
+        SELECT uclass.roomid as id,uclass.name as name,uclass.num as num,
+        FROM d_class uclass
+        where uclass.roomid = #{c_classid}
+        and uclass.name = #{c_classname}
     </select>
 
     <select id="getAll" resultType="Class">
-        select * from d_class;
+        select * from room;
     </select>
 </mapper>

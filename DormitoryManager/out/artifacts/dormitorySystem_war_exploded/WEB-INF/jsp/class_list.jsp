@@ -46,13 +46,13 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" action="/findClass" >
-            <input class="layui-input" placeholder="请输入班级编号" name="c_classid" id="c_classid">
-            <input class="layui-input" placeholder="请输入班级名" name="c_classname" id="c_classname">
-            <input class="layui-input" placeholder="请输入辅导员姓名" name="c_counsellor" id="c_counsellor">
+            <input class="layui-input" placeholder="请输入教室编号" name="c_classid" id="c_classid">
+            <input class="layui-input" placeholder="请输入教室名" name="c_classname" id="c_classname">
+            <input class="layui-input" placeholder="请输入所属教学楼" name="c_counsellor" id="c_counsellor">
 
             <input class="layui-input" type="hidden" name="pageIndex" value="1">
             <input class="layui-input" type="hidden" name="pageSize" value="3">
-            <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;查询</i></button>
         </form>
     </div>
     <xblock>
@@ -66,23 +66,23 @@
         <div class="layui-col-md10">
             <form class="layui-form" id="addEmployeeForm">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">班级编号：</label>
+                    <label class="layui-form-label">所属教学楼：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="c_classid" class="layui-input" placeholder="请输入班级编号">
+                        <input type="text" name="buildname" class="layui-input" placeholder="请输入所属教学楼">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">班级名：</label>
+                    <label class="layui-form-label">教室编号：</label>
                     <div class="layui-input-block">
-                        <input type="text" lay-verify="required" name="c_classname"  class="layui-input" placeholder="请输入班级名">
+                        <input type="text" lay-verify="required" name="name"  class="layui-input" placeholder="请输入教室编号">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">辅导员：</label>
+                    <label class="layui-form-label">教室容量：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="c_counsellor" class="layui-input" placeholder="请输入辅导员姓名">
+                        <input type="text" name="num" class="layui-input" placeholder="请输入教室容量">
                     </div>
                 </div>
 
@@ -103,24 +103,24 @@
     <table class="layui-table">
         <thead>
             <th>ID</th>
-            <th>班级编号</th>
-            <th>班级名</th>
-            <th>辅导员</th>
+            <th>所属教学楼</th>
+            <th>教室</th>
+            <th>教室容量</th>
             <th>操作</th>
         </thead>
         <tbody>
 <c:forEach items="${ci.list}" var="ci">
         <tr>
-            <td>${ci.c_id}</td>
-            <td>${ci.c_classid}</td>
-            <td>${ci.c_classname}</td>
-            <td>${ci.c_counsellor}</td>
+            <td>${ci.roomid}</td>
+            <td>${ci.buildname}</td>
+            <td>${ci.name}</td>
+            <td>${ci.num}</td>
             <td>
-                <a title="编辑"    id= "updateEdit"    href="/findClassById?c_id=${ci.c_id}">
-                    <i class="layui-icon">&#xe642;</i>
+                <a title="编辑"    id= "updateEdit"    href="/findClassById?c_id=${ci.roomid}">
+                    <i class="layui-icon">&#xe642;编辑</i>
                 </a>
-                <a title="删除" onclick="member_del(this,'${ci.c_id}')" href="javascript:;">
-                    <i class="layui-icon">&#xe640;</i>
+                <a title="删除" onclick="member_del(this,'${ci.roomid}')" href="javascript:;">
+                    <i class="layui-icon">&#xe640;删除</i>
                 </a>
             </td>
         </tr>

@@ -23,14 +23,14 @@
 
 <div class="x-body">
     <form class="layui-form"  id="f_auto" action="/updateClass" method="post" >
-        <input type="hidden" value="${sessionScope.c.c_id}" name="c_id" id="c_id"/>
+        <input type="hidden" value="${sessionScope.c.roomid}" name="c_id" id="c_id"/>
         <div class="layui-form-item">
             <label for="c_classid" class="layui-form-label">
-                <span class="">班级编号</span>
+                <span class="">所属教室</span>
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="c_classid" name="c_classid"
-                       autocomplete="off" value="${sessionScope.c.c_classid}" class="layui-input">
+                       autocomplete="off" value="${sessionScope.c.buildname}" class="layui-input">
             </div>
         </div>
 
@@ -40,17 +40,17 @@
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="c_classname" name="c_classname"
-                       autocomplete="off" value="${sessionScope.c.c_classname}" class="layui-input">
+                       autocomplete="off" value="${sessionScope.c.name}" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label for="c_counsellor" class="layui-form-label">
-                <span class="">辅导员姓名</span>
+                <span class="">容量</span>
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="c_counsellor" name="c_counsellor"
-                       autocomplete="off" value="${sessionScope.c.c_counsellor}" class="layui-input">
+                       autocomplete="off" value="${sessionScope.c.num}" class="layui-input">
             </div>
         </div>
 
